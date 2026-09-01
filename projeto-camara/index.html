@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Frequência - Câmara Municipal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <header class="cabecalho">
+
+        <div class="logo">
+            <div class="logo-simbolo">CM</div>
+        </div>
+
+        <div class="titulo">
+            <h1>CÂMARA MUNICIPAL</h1>
+            <h2>LISTA DE FREQUÊNCIA DOS FUNCIONÁRIOS</h2>
+        </div>
+
+    </header>
+
+    <section class="painel">
+
+        <div class="linha-formulario">
+
+            <div class="campo funcionario">
+                <label for="funcionario">Nome do Funcionário</label>
+
+                <input
+                    type="text"
+                    id="funcionario"
+                    placeholder="Digite o nome do funcionário"
+                    autocomplete="off"
+                >
+            </div>
+
+            <div class="campo cargo">
+                <label for="cargo">Cargo</label>
+
+                <input
+                    type="text"
+                    id="cargo"
+                    placeholder="Digite o cargo"
+                    autocomplete="off"
+                >
+            </div>
+
+        </div>
+
+        <div class="linha-formulario">
+
+            <div class="campo">
+                <label for="mes">Mês</label>
+
+                <select id="mes">
+
+                    <option value="1">Janeiro</option>
+                    <option value="2">Fevereiro</option>
+                    <option value="3">Março</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Maio</option>
+                    <option value="6">Junho</option>
+                    <option value="7">Julho</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Setembro</option>
+                    <option value="10">Outubro</option>
+                    <option value="11">Novembro</option>
+                    <option value="12">Dezembro</option>
+
+                </select>
+            </div>
+
+            <div class="campo">
+
+                <label for="ano">Ano</label>
+
+                <input
+                    type="number"
+                    id="ano"
+                    min="1900"
+                    max="2100"
+                >
+
+            </div>
+
+            <div class="campo botao-container">
+
+                <button
+                    type="button"
+                    id="btnGerar"
+                    onclick="gerarFrequencia()"
+                >
+                    GERAR FREQUÊNCIA
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="area-frequencia">
+
+        <div class="informacoes-funcionario">
+
+            <div>
+                <strong>Funcionário</strong>
+                <span id="nomeExibicao">---</span>
+            </div>
+
+            <div>
+                <strong>Cargo</strong>
+                <span id="cargoExibicao">---</span>
+            </div>
+
+            <div>
+                <strong>Período</strong>
+                <span id="periodoExibicao">---</span>
+            </div>
+
+        </div>
+
+        <div class="tabela-container">
+
+            <table id="tabelaFrequencia">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Nº</th>
+
+                        <th>Data</th>
+
+                        <th>Dia</th>
+
+                        <th>Entrada</th>
+
+                        <th>Saída</th>
+
+                        <th>Retorno</th>
+
+                        <th>Saída</th>
+
+                        <th>Assinatura</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="corpoTabela"></tbody>
+
+            </table>
+
+        </div>
+
+        <div class="acoes">
+
+            <button
+                type="button"
+                class="btn-imprimir"
+                onclick="imprimirFrequencia()"
+            >
+                IMPRIMIR
+            </button>
+
+            <button
+                type="button"
+                class="btn-limpar"
+                onclick="limparTabela()"
+            >
+                LIMPAR
+            </button>
+
+        </div>
+
+        <div class="assinatura">
+
+            <div class="linha-assinatura"></div>
+
+            <p>Assinatura do Responsável</p>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
