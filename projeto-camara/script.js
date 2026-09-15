@@ -420,27 +420,58 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 function duplicarAssinatura() {
-    const primeiraAssinatura = document.querySelector(".canvas-assinatura")
+    const linhas = document.querySelectorAll("#corpoTabela tr")
 
-    if (!primeiraAssinatura) {
-        mostrarMensagem("Gere a ficha antes de duplicar a assinatura.")
+    let assinaturaPrincipal = null
+
+    for (const linha of linhas) {
+        if (!linha.classList.contains("fim-de-semana")) {
+            const canvas = linha.querySelector(".canvas-assinatura")
+
+            if (canvas) {
+                assinaturaPrincipal = canvas
+                break
+            }
+        }
+    }
+
+    if (!assinaturaPrincipal) {
+        mostrarMensagem(
+            "Gere a ficha antes de duplicar a assinatura."
+        )
+
         return
     }
 
-    const canvasPrincipal = primeiraAssinatura
-    const contextoPrincipal = canvasPrincipal.getContext("2d")
+    const contextoPrincipal =
+        assinaturaPrincipal.getContext("2d")
 
-    const imagemAssinatura = contextoPrincipal.getImageData(
-        0,
-        0,
-        canvasPrincipal.width,
-        canvasPrincipal.height
+    const imagemAssinatura =
+        contextoPrincipal.getImageData(
+            0,
+            0,
+            assinaturaPrincipal.width,
+            assinaturaPrincipal.height
+        )
+
+    const assinaturas = document.querySelectorAll(
+        ".canvas-assinatura"
     )
 
-    const assinaturas = document.querySelectorAll(".canvas-assinatura")
+    assinaturas.forEach(function (canvas) {
+        const linha = canvas.closest("tr")
 
-    assinaturas.forEach(function (canvas, indice) {
-        if (indice === 0) {
+        if (!linha) {
+            return
+        }
+
+        if (
+            linha.classList.contains("fim-de-semana")
+        ) {
+            return
+        }
+
+        if (canvas === assinaturaPrincipal) {
             return
         }
 
@@ -461,7 +492,7 @@ function duplicarAssinatura() {
     })
 
     mostrarMensagem(
-        "Assinatura duplicada em todas as linhas.",
+        "Assinatura duplicada somente nos dias úteis.",
         "sucesso"
     )
 }
