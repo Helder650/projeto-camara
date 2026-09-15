@@ -11,7 +11,7 @@ const meses = [
     "Outubro",
     "Novembro",
     "Dezembro"
-];
+]
 
 const diasSemana = [
     "Domingo",
@@ -21,230 +21,447 @@ const diasSemana = [
     "Quinta-feira",
     "Sexta-feira",
     "Sábado"
-];
+]
+
+
+const funcionarioInput = document.getElementById("funcionario")
+const cargoInput = document.getElementById("cargo")
+const mesInput = document.getElementById("mes")
+const anoInput = document.getElementById("ano")
+
+const nomeExibicao = document.getElementById("nomeExibicao")
+const cargoExibicao = document.getElementById("cargoExibicao")
+const referenciaExibicao = document.getElementById("referenciaExibicao")
+const corpoTabela = document.getElementById("corpoTabela")
+const mensagem = document.getElementById("mensagem")
+
+let tabelaEmEdicao = false
+
+
+function mostrarMensagem(texto, tipo = "erro") {
+    mensagem.textContent = texto
+    mensagem.className = "mensagem " + tipo
+}
+
 
 function gerarFrequencia() {
-
-    const funcionario = document
-        .getElementById("funcionario")
-        .value
-        .trim();
-
-    const cargo = document
-        .getElementById("cargo")
-        .value
-        .trim();
-
-    const mes = Number(
-        document.getElementById("mes").value
-    );
-
-    const ano = Number(
-        document.getElementById("ano").value
-    );
+    const funcionario = funcionarioInput.value.trim()
+    const cargo = cargoInput.value.trim()
+    const mes = Number(mesInput.value)
+    const ano = Number(anoInput.value)
 
     if (funcionario === "") {
-        alert("Digite o nome do funcionário.");
-        document.getElementById("funcionario").focus();
-        return;
+        mostrarMensagem("Digite o nome do funcionário.")
+        funcionarioInput.focus()
+        return
     }
 
     if (cargo === "") {
-        alert("Digite o cargo do funcionário.");
-        document.getElementById("cargo").focus();
-        return;
+        mostrarMensagem("Digite o cargo do funcionário.")
+        cargoInput.focus()
+        return
     }
 
     if (mes < 1 || mes > 12) {
-        alert("Selecione um mês válido.");
-        document.getElementById("mes").focus();
-        return;
+        mostrarMensagem("Selecione um mês.")
+        mesInput.focus()
+        return
     }
 
     if (ano < 1900 || ano > 2100) {
-        alert("Digite um ano entre 1900 e 2100.");
-        document.getElementById("ano").focus();
-        return;
+        mostrarMensagem("Digite um ano válido entre 1900 e 2100.")
+        anoInput.focus()
+        return
     }
 
-    document.getElementById(
-        "nomeExibicao"
-    ).textContent = funcionario;
+    const quantidadeDias = new Date(ano, mes, 0).getDate()
 
-    document.getElementById(
-        "cargoExibicao"
-    ).textContent = cargo;
+    nomeExibicao.textContent = funcionario.toUpperCase()
+    cargoExibicao.textContent = cargo.toUpperCase()
 
-    document.getElementById(
-        "periodoExibicao"
-    ).textContent = `${meses[mes - 1]} / ${ano}`;
+    referenciaExibicao.textContent =
+        String(mes).padStart(2, "0") + "/" + ano
 
-    const quantidadeDias = new Date(
-        ano,
-        mes,
-        0
-    ).getDate();
+    corpoTabela.innerHTML = ""
 
-    const corpoTabela = document.getElementById(
-        "corpoTabela"
-    );
+    tabelaEmEdicao = false
 
-    corpoTabela.innerHTML = "";
+    const botaoEditar = document.querySelector(".botao.editar")
+    botaoEditar.textContent = "Editar tabela"
+
 
     for (let dia = 1; dia <= quantidadeDias; dia++) {
 
-        const data = new Date(
-            ano,
-            mes - 1,
-            dia
-        );
-
-        const diaSemana = data.getDay();
-
-        const nomeDia = diasSemana[diaSemana];
-
-        const saidaTarde =
-            diaSemana === 2
-                ? "21:00"
-                : "17:00";
-
-        const diaFormatado = String(
-            dia
-        ).padStart(2, "0");
-
-        const mesFormatado = String(
-            mes
-        ).padStart(2, "0");
+        const data = new Date(ano, mes - 1, dia)
+        const diaSemana = data.getDay()
 
         const dataFormatada =
-            `${diaFormatado}/${mesFormatado}/${ano}`;
+            String(dia).padStart(2, "0") +
+            "/" +
+            String(mes).padStart(2, "0") +
+            "/" +
+            ano
 
-        const tr = document.createElement("tr");
+        const nomeDia = diasSemana[diaSemana]
 
-        if (
-            diaSemana === 0 ||
-            diaSemana === 6
-        ) {
-            tr.classList.add(
-                "fim-de-semana"
-            );
+        let entrada = "08:00"
+        let saidaManha = "12:00"
+        let inicioTarde = "13:00"
+        let saidaTarde = "17:00"
+        let observacao = ""
+
+        const fimDeSemana =
+            diaSemana === 0 || diaSemana === 6
+
+
+        if (diaSemana === 2) {
+            saidaTarde = "21:00"
         }
 
-        tr.innerHTML = `
-            <td>${diaFormatado}</td>
+
+        if (fimDeSemana) {
+            entrada = ""
+            saidaManha = ""
+            inicioTarde = ""
+            saidaTarde = ""
+
+            observacao = ""
+        }
+
+
+        const linha = document.createElement("tr")
+
+        if (fimDeSemana) {
+            linha.classList.add("fim-de-semana")
+        }
+
+
+        linha.innerHTML = `
+            <td>${dia}</td>
 
             <td>${dataFormatada}</td>
 
-            <td>
-                <strong>${nomeDia}</strong>
-            </td>
+            <td>${nomeDia}</td>
 
             <td>
-                <span class="horario-fixo">
-                    07:00
-                </span>
-            </td>
-
-            <td>
-                <span class="horario-fixo">
-                    11:00
-                </span>
+                <input
+                    type="time"
+                    class="campo-editavel"
+                    value="${entrada}"
+                    disabled
+                >
             </td>
 
             <td>
-                <span class="horario-fixo">
-                    13:00
-                </span>
+                <input
+                    type="time"
+                    class="campo-editavel"
+                    value="${saidaManha}"
+                    disabled
+                >
             </td>
 
             <td>
-                <span class="horario-fixo">
-                    ${saidaTarde}
-                </span>
+                <input
+                    type="time"
+                    class="campo-editavel"
+                    value="${inicioTarde}"
+                    disabled
+                >
             </td>
 
-            <td class="celula-assinatura">
-                <div class="linha-assinatura-dia"></div>
+            <td>
+                <input
+                    type="time"
+                    class="campo-editavel"
+                    value="${saidaTarde}"
+                    disabled
+                >
             </td>
-        `;
 
-        corpoTabela.appendChild(tr);
+            <td class="campo-assinatura">
+                <canvas
+                    class="canvas-assinatura"
+                    width="150"
+                    height="35"
+                ></canvas>
+
+                <button
+                    type="button"
+                    class="botao-apagar-assinatura"
+                    onclick="apagarAssinatura(this)"
+                    disabled
+                >
+                    Apagar
+                </button>
+            </td>
+
+            <td>
+                <input
+                    type="text"
+                    class="campo-observacao"
+                    value="${observacao}"
+                    disabled
+                >
+            </td>
+        `
+
+        corpoTabela.appendChild(linha)
+
+        configurarAssinatura(
+            linha.querySelector(".canvas-assinatura")
+        )
+    }
+
+
+    mostrarMensagem(
+        "Ficha gerada com sucesso.",
+        "sucesso"
+    )
+}
+
+
+function alternarEdicao() {
+    const camposEditaveis = document.querySelectorAll(
+        ".campo-editavel, .campo-observacao"
+    )
+
+    const botoesApagar = document.querySelectorAll(
+        ".botao-apagar-assinatura"
+    )
+
+    const canvasAssinaturas = document.querySelectorAll(
+        ".canvas-assinatura"
+    )
+
+    if (camposEditaveis.length === 0) {
+        mostrarMensagem("Gere a ficha antes de editar.")
+        return
+    }
+
+    tabelaEmEdicao = !tabelaEmEdicao
+
+    camposEditaveis.forEach(function (campo) {
+        campo.disabled = !tabelaEmEdicao
+    })
+
+    botoesApagar.forEach(function (botao) {
+        botao.disabled = !tabelaEmEdicao
+    })
+
+    canvasAssinaturas.forEach(function (canvas) {
+        canvas.classList.toggle(
+            "assinatura-editavel",
+            tabelaEmEdicao
+        )
+    })
+
+    const botaoEditar = document.querySelector(".botao.editar")
+
+    if (tabelaEmEdicao) {
+        botaoEditar.textContent = "Salvar alterações"
+
+        mostrarMensagem(
+            "Edite os horários, observações ou desenhe as assinaturas.",
+            "sucesso"
+        )
+    } else {
+        botaoEditar.textContent = "Editar tabela"
+
+        mostrarMensagem(
+            "Alterações salvas na tabela.",
+            "sucesso"
+        )
     }
 }
+
+
+function configurarAssinatura(canvas) {
+    const contexto = canvas.getContext("2d")
+
+    let desenhando = false
+
+    function obterPosicao(evento) {
+        const retangulo = canvas.getBoundingClientRect()
+
+        return {
+            x: (evento.clientX - retangulo.left) *
+                (canvas.width / retangulo.width),
+
+            y: (evento.clientY - retangulo.top) *
+                (canvas.height / retangulo.height)
+        }
+    }
+
+    canvas.addEventListener("pointerdown", function (evento) {
+        if (!tabelaEmEdicao) {
+            return
+        }
+
+        desenhando = true
+
+        canvas.setPointerCapture(evento.pointerId)
+
+        const posicao = obterPosicao(evento)
+
+        contexto.beginPath()
+        contexto.moveTo(posicao.x, posicao.y)
+    })
+
+    canvas.addEventListener("pointermove", function (evento) {
+        if (!desenhando || !tabelaEmEdicao) {
+            return
+        }
+
+        const posicao = obterPosicao(evento)
+
+        contexto.lineWidth = 1.5
+        contexto.lineCap = "round"
+        contexto.strokeStyle = "#000"
+
+        contexto.lineTo(posicao.x, posicao.y)
+        contexto.stroke()
+    })
+
+    canvas.addEventListener("pointerup", function () {
+        desenhando = false
+    })
+
+    canvas.addEventListener("pointerleave", function () {
+        desenhando = false
+    })
+}
+
+
+function apagarAssinatura(botao) {
+    const canvas = botao.parentElement.querySelector(
+        ".canvas-assinatura"
+    )
+
+    const contexto = canvas.getContext("2d")
+
+    contexto.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    )
+}
+
 
 function imprimirFrequencia() {
+    const funcionario = funcionarioInput.value.trim()
+    const cargo = cargoInput.value.trim()
+    const mes = mesInput.value
+    const ano = anoInput.value
 
-    const tabela = document.getElementById(
-        "corpoTabela"
-    );
+    if (
+        funcionario === "" ||
+        cargo === "" ||
+        mes === "" ||
+        ano === ""
+    ) {
+        mostrarMensagem(
+            "Preencha todos os campos antes de imprimir."
+        )
 
-    if (tabela.children.length === 0) {
-        alert(
-            "Primeiro gere a lista de frequência."
-        );
-        return;
+        return
     }
 
-    window.print();
+    if (corpoTabela.children.length === 0) {
+        mostrarMensagem(
+            "Gere a ficha antes de imprimir."
+        )
+
+        return
+    }
+
+    window.print()
 }
+
 
 function limparTabela() {
+    funcionarioInput.value = ""
+    cargoInput.value = ""
+    mesInput.value = ""
+    anoInput.value = ""
 
-    const confirmar = confirm(
-        "Deseja realmente limpar a frequência?"
-    );
+    nomeExibicao.textContent =
+        "_______________________________________________"
 
-    if (!confirmar) {
-        return;
-    }
+    cargoExibicao.textContent =
+        "________________________________"
 
-    document.getElementById(
-        "corpoTabela"
-    ).innerHTML = "";
+    referenciaExibicao.textContent = "--/----"
 
-    document.getElementById(
-        "nomeExibicao"
-    ).textContent = "---";
+    corpoTabela.innerHTML = `
+        <tr>
+            <td colspan="9" class="sem-dados">
+                Preencha os dados acima e clique em
+                “Gerar ficha”.
+            </td>
+        </tr>
+    `
 
-    document.getElementById(
-        "cargoExibicao"
-    ).textContent = "---";
+    tabelaEmEdicao = false
 
-    document.getElementById(
-        "periodoExibicao"
-    ).textContent = "---";
+    const botaoEditar = document.querySelector(".botao.editar")
+    botaoEditar.textContent = "Editar tabela"
 
-    document.getElementById(
-        "funcionario"
-    ).value = "";
-
-    document.getElementById(
-        "cargo"
-    ).value = "";
+    mostrarMensagem("")
 }
 
-window.addEventListener(
-    "DOMContentLoaded",
-    function() {
 
-        const dataAtual = new Date();
+document.addEventListener("DOMContentLoaded", function () {
+    const dataAtual = new Date()
 
-        const mesAtual =
-            dataAtual.getMonth() + 1;
+    mesInput.value = dataAtual.getMonth() + 1
+    anoInput.value = dataAtual.getFullYear()
+})
 
-        const anoAtual =
-            dataAtual.getFullYear();
+function duplicarAssinatura() {
+    const primeiraAssinatura = document.querySelector(".canvas-assinatura")
 
-        document.getElementById(
-            "mes"
-        ).value = mesAtual;
-
-        document.getElementById(
-            "ano"
-        ).value =
-            anoAtual >= 1900 &&
-            anoAtual <= 2100
-                ? anoAtual
-                : 2026;
+    if (!primeiraAssinatura) {
+        mostrarMensagem("Gere a ficha antes de duplicar a assinatura.")
+        return
     }
-);
+
+    const canvasPrincipal = primeiraAssinatura
+    const contextoPrincipal = canvasPrincipal.getContext("2d")
+
+    const imagemAssinatura = contextoPrincipal.getImageData(
+        0,
+        0,
+        canvasPrincipal.width,
+        canvasPrincipal.height
+    )
+
+    const assinaturas = document.querySelectorAll(".canvas-assinatura")
+
+    assinaturas.forEach(function (canvas, indice) {
+        if (indice === 0) {
+            return
+        }
+
+        const contexto = canvas.getContext("2d")
+
+        contexto.clearRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        )
+
+        contexto.putImageData(
+            imagemAssinatura,
+            0,
+            0
+        )
+    })
+
+    mostrarMensagem(
+        "Assinatura duplicada em todas as linhas.",
+        "sucesso"
+    )
+}

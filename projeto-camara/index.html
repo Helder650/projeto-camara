@@ -1,197 +1,238 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Frequência - Câmara Municipal</title>
+
+    <title>Ficha Individual de Frequência</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+    <main class="container">
 
-    <header class="cabecalho">
+        <section class="painel-controle">
 
-        <div class="logo">
-            <div class="logo-simbolo">CM</div>
-        </div>
+            <h1>Gerador de Ficha de Frequência</h1>
 
-        <div class="titulo">
-            <h1>CÂMARA MUNICIPAL</h1>
-            <h2>LISTA DE FREQUÊNCIA DOS FUNCIONÁRIOS</h2>
-        </div>
+            <div class="formulario">
 
-    </header>
+                <div class="campo">
+                    <label for="funcionario">Nome do funcionário</label>
 
-    <section class="painel">
+                    <input type="text" id="funcionario" placeholder="Digite o nome completo">
+                </div>
 
-        <div class="linha-formulario">
+                <div class="campo">
+                    <label for="cargo">Cargo ou função</label>
 
-            <div class="campo funcionario">
-                <label for="funcionario">Nome do Funcionário</label>
+                    <input type="text" id="cargo" placeholder="Digite o cargo">
+                </div>
 
-                <input
-                    type="text"
-                    id="funcionario"
-                    placeholder="Digite o nome do funcionário"
-                    autocomplete="off"
-                >
-            </div>
+                <div class="campo">
+                    <label for="mes">Mês</label>
 
-            <div class="campo cargo">
-                <label for="cargo">Cargo</label>
+                    <select id="mes">
+                        <option value="">Selecione o mês</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
 
-                <input
-                    type="text"
-                    id="cargo"
-                    placeholder="Digite o cargo"
-                    autocomplete="off"
-                >
-            </div>
+                <div class="campo">
+                    <label for="ano">Ano</label>
 
-        </div>
-
-        <div class="linha-formulario">
-
-            <div class="campo">
-                <label for="mes">Mês</label>
-
-                <select id="mes">
-
-                    <option value="1">Janeiro</option>
-                    <option value="2">Fevereiro</option>
-                    <option value="3">Março</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Maio</option>
-                    <option value="6">Junho</option>
-                    <option value="7">Julho</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Setembro</option>
-                    <option value="10">Outubro</option>
-                    <option value="11">Novembro</option>
-                    <option value="12">Dezembro</option>
-
-                </select>
-            </div>
-
-            <div class="campo">
-
-                <label for="ano">Ano</label>
-
-                <input
-                    type="number"
-                    id="ano"
-                    min="1900"
-                    max="2100"
-                >
+                    <input type="number" id="ano" min="1900" max="2100" placeholder="Ex.: 2026">
+                </div>
 
             </div>
 
-            <div class="campo botao-container">
+            <div class="acoes">
 
-                <button
-                    type="button"
-                    id="btnGerar"
-                    onclick="gerarFrequencia()"
-                >
-                    GERAR FREQUÊNCIA
+                <button class="botao assinatura" onclick="duplicarAssinatura()">
+                    Repetir assinatura
+                </button>
+
+                <button class="botao principal" onclick="gerarFrequencia()">
+                    Gerar ficha
+                </button>
+
+                <button class="botao secundario" onclick="imprimirFrequencia()">
+                    Imprimir ficha
+                </button>
+
+                <button class="botao editar" onclick="alternarEdicao()">
+                    Editar tabela
+                </button>
+
+                <button class="botao limpar" onclick="limparTabela()">
+                    Limpar
                 </button>
 
             </div>
 
-        </div>
+            <p id="mensagem" class="mensagem"></p>
 
-    </section>
+        </section>
 
-    <section class="area-frequencia">
 
-        <div class="informacoes-funcionario">
+        <section class="ficha" id="areaImpressao">
 
-            <div>
-                <strong>Funcionário</strong>
-                <span id="nomeExibicao">---</span>
+            <div class="cabecalho-ficha">
+
+                <div class="logos-cabecalho">
+
+                    <div class="area-logo">
+                        <img src="/img/link129 (1).png" alt="Logo do Município de General Sampaio"
+                            class="logo-municipio">
+                    </div>
+
+                    <div class="titulo-cabecalho">
+
+                        <div class="referencia">
+                            REF.:
+                            <span id="referenciaExibicao">--/----</span>
+                        </div>
+
+                        <h2>FICHA INDIVIDUAL DE FREQUÊNCIA</h2>
+
+                        <div class="dados-camara">
+                            <strong>
+                                CÂMARA MUNICIPAL DE GENERAL SAMPAIO
+                            </strong>
+
+                            <span>
+                                CNPJ: 23.489.891/0001-97
+                            </span>
+
+                            <span>
+                                RUA JOSÉ FELIX - GENERAL SAMPAIO - CE
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="area-logo">
+                        <img src="/img/Brasão_do_Ceará.svg.webp" alt="Logo do Estado do Ceará" class="logo-ceara">
+                    </div>
+
+                </div>
+
             </div>
 
-            <div>
-                <strong>Cargo</strong>
-                <span id="cargoExibicao">---</span>
+
+            <div class="informacoes-funcionario">
+
+                <div class="informacao">
+                    <strong>CARGA HORÁRIA:</strong>
+                    <span>200</span>
+                </div>
+
+                <div class="informacao">
+                    <strong>FUNÇÃO:</strong>
+                    <span id="cargoExibicao">
+                        __________________________________
+                    </span>
+                </div>
+
+                <div class="informacao nome">
+                    <strong>NOME:</strong>
+                    <span id="nomeExibicao">
+                        _______________________________________________
+                    </span>
+                </div>
+
             </div>
 
-            <div>
-                <strong>Período</strong>
-                <span id="periodoExibicao">---</span>
-            </div>
 
-        </div>
-
-        <div class="tabela-container">
-
-            <table id="tabelaFrequencia">
+            <table class="tabela-frequencia">
 
                 <thead>
 
                     <tr>
+                        <th rowspan="2" class="coluna-numero">
+                            Nº
+                        </th>
 
-                        <th>Nº</th>
+                        <th rowspan="2" class="coluna-data">
+                            DATA
+                        </th>
 
-                        <th>Data</th>
+                        <th rowspan="2" class="coluna-dia">
+                            DIA
+                        </th>
 
-                        <th>Dia</th>
+                        <th colspan="2" class="grupo-manha">
+                            MANHÃ
+                        </th>
 
-                        <th>Entrada</th>
+                        <th colspan="3" class="grupo-tarde">
+                            TARDE
+                        </th>
 
-                        <th>Saída</th>
+                        <th rowspan="2" class="coluna-observacao">
+                            OBSERVAÇÃO
+                        </th>
+                    </tr>
 
-                        <th>Retorno</th>
-
-                        <th>Saída</th>
-
-                        <th>Assinatura</th>
-
+                    <tr>
+                        <th>ENTRADA</th>
+                        <th>SAÍDA</th>
+                        <th>INÍCIO</th>
+                        <th>SAÍDA</th>
+                        <th>ASSINATURA</th>
                     </tr>
 
                 </thead>
 
-                <tbody id="corpoTabela"></tbody>
+                <tbody id="corpoTabela">
+
+                    <tr>
+                        <td colspan="9" class="sem-dados">
+                            Preencha os dados acima e clique em
+                            “Gerar ficha”.
+                        </td>
+                    </tr>
+
+                </tbody>
 
             </table>
 
-        </div>
 
-        <div class="acoes">
+            <div class="assinaturas">
 
-            <button
-                type="button"
-                class="btn-imprimir"
-                onclick="imprimirFrequencia()"
-            >
-                IMPRIMIR
-            </button>
+                <p>
+                    <strong>ASSINATURA DO SERVIDOR:</strong>
+                    <span></span>
+                </p>
 
-            <button
-                type="button"
-                class="btn-limpar"
-                onclick="limparTabela()"
-            >
-                LIMPAR
-            </button>
+                <p>
+                    <strong>ASSINATURA DO RESPONSÁVEL:</strong>
+                    <span></span>
+                </p>
 
-        </div>
+            </div>
 
-        <div class="assinatura">
+        </section>
 
-            <div class="linha-assinatura"></div>
+    </main>
 
-            <p>Assinatura do Responsável</p>
 
-        </div>
-
-    </section>
-
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
+
 </html>
